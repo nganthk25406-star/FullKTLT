@@ -1,0 +1,35 @@
+[
+    {
+        "name": "Nga",
+        "phone": "01234",
+        "points": 430,
+        "spent": 12000000,
+        "history": []
+    },
+    {
+        "name": "Sang",
+        "phone": "12345",
+        "points": 572,
+        "spent": 6000000,
+        "history": []
+    },
+    {
+        "name": "Nghi",
+        "phone": "000",
+        "points": 35,
+        "spent": 1500000,
+        "history": []
+    },
+    {
+        "name": "Kha",
+        "phone": "0112345",
+        "email": "",
+        "points": 280
+    },
+    {
+        "name": "Ngọc",
+        "phone": "111",
+        "email": "",
+        "points": 84
+    }
+]

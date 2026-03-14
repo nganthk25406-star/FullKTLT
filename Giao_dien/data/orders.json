@@ -1,0 +1,217 @@
+[
+    {
+        "id": "ORD001",
+        "customer": "Nghi",
+        "items": [
+            {
+                "name": "Áo thun Local Brand",
+                "qty": 2,
+                "price": 250000,
+                "subtotal": 500000,
+                "cost": 300000
+            }
+        ],
+        "total": 540000,
+        "profit": 240000,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD002",
+        "customer": "Nghi",
+        "items": [
+            {
+                "name": "Quần Skinny Jean",
+                "qty": 5,
+                "price": 100000,
+                "subtotal": 500000,
+                "cost": 350000.0
+            }
+        ],
+        "total": 540000,
+        "profit": 190000,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD003",
+        "customer": "Nga",
+        "items": [
+            {
+                "name": "Quần Skinny Jean",
+                "qty": 5,
+                "price": 100000,
+                "subtotal": 500000,
+                "cost": 350000.0
+            }
+        ],
+        "total": 502199,
+        "profit": 152199,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD004",
+        "customer": "Sang",
+        "items": [
+            {
+                "name": "Áo thun Local Brand",
+                "qty": 10,
+                "price": 250000,
+                "subtotal": 2500000,
+                "cost": 1500000
+            }
+        ],
+        "total": 2565000,
+        "profit": 1065000,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD005",
+        "customer": "Phương",
+        "items": [
+            {
+                "name": "Áo thun Local Brand",
+                "qty": 8,
+                "price": 250000,
+                "subtotal": 2000000,
+                "cost": 1400000.0
+            }
+        ],
+        "total": 2160000,
+        "profit": 760000,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD006",
+        "customer": "Nga",
+        "items": [
+            {
+                "name": "Áo thun Local Brand",
+                "qty": 1,
+                "price": 250000,
+                "subtotal": 250000,
+                "cost": 175000.0
+            },
+            {
+                "name": "Áo khoác Hoodie",
+                "qty": 2,
+                "price": 400000,
+                "subtotal": 800000,
+                "cost": 500000
+            }
+        ],
+        "total": 1054620,
+        "profit": 379620,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD007",
+        "customer": "Kha",
+        "items": [
+            {
+                "name": "Áo khoác Bomber",
+                "qty": 2,
+                "price": 400000,
+                "subtotal": 800000,
+                "cost": 560000
+            },
+            {
+                "name": "Váy hoa nhí",
+                "qty": 2,
+                "price": 250000,
+                "subtotal": 500000,
+                "cost": 320000
+            }
+        ],
+        "total": 1404000,
+        "profit": 524000,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD008",
+        "customer": "J97",
+        "items": [
+            {
+                "name": "Áo hoodie unisex",
+                "qty": 1,
+                "price": 300000,
+                "subtotal": 300000,
+                "cost": 200000
+            },
+            {
+                "name": "Mũ lưỡi trai",
+                "qty": 1,
+                "price": 80000,
+                "subtotal": 80000,
+                "cost": 40000
+            }
+        ],
+        "total": 380000,
+        "profit": 140000,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD009",
+        "customer": "Nghi",
+        "items": [
+            {
+                "name": "Đồ bộ",
+                "qty": 3,
+                "price": 62500,
+                "subtotal": 187500,
+                "cost": 150000
+            }
+        ],
+        "total": 202500,
+        "profit": 52500,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD010",
+        "customer": "Nga",
+        "items": [
+            {
+                "name": "Đồ bộ",
+                "qty": 7,
+                "price": 62500,
+                "subtotal": 437500,
+                "cost": 350000
+            }
+        ],
+        "total": 439425,
+        "profit": 89425,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD011",
+        "customer": "Ngọc",
+        "items": [
+            {
+                "name": "Quần tây âu",
+                "qty": 1,
+                "price": 280000,
+                "subtotal": 280000,
+                "cost": 190000
+            },
+            {
+                "name": "Giày Sneaker nữ",
+                "qty": 1,
+                "price": 500000,
+                "subtotal": 500000,
+                "cost": 350000
+            }
+        ],
+        "total": 842400,
+        "profit": 302400,
+        "date": "2026-03-14",
+        "method": "Tiền mặt"
+    }
+]

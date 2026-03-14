@@ -1,0 +1,101 @@
+[
+    {
+        "id": "P001",
+        "name": "Đồ bộ",
+        "size": "M",
+        "color": "Trắng",
+        "qty": 5,
+        "price": 62500,
+        "cost": 50000
+    },
+    {
+        "id": "P002",
+        "name": "Quần Jeans nam",
+        "size": "32",
+        "color": "Xanh đen",
+        "qty": 10,
+        "price": 312500,
+        "cost": 250000
+    },
+    {
+        "id": "P003",
+        "name": "Váy hoa nhí",
+        "size": "S",
+        "color": "Vàng",
+        "qty": 2,
+        "price": 200000,
+        "cost": 160000
+    },
+    {
+        "id": "P004",
+        "name": "Áo khoác Bomber",
+        "size": "L",
+        "color": "Đen",
+        "qty": 3,
+        "price": 400000,
+        "cost": 280000
+    },
+    {
+        "id": "P005",
+        "name": "Giày Sneaker nữ",
+        "size": "37",
+        "color": "Trắng hồng",
+        "qty": 19,
+        "price": 500000,
+        "cost": 350000
+    },
+    {
+        "id": "P006",
+        "name": "Áo sơ mi lụa",
+        "size": "M",
+        "color": "Xanh ngọc",
+        "qty": 8,
+        "price": 220000,
+        "cost": 150000
+    },
+    {
+        "id": "P007",
+        "name": "Quần tây âu",
+        "size": "L",
+        "color": "Đen",
+        "qty": 11,
+        "price": 280000,
+        "cost": 190000
+    },
+    {
+        "id": "P008",
+        "name": "Áo hoodie unisex",
+        "size": "XL",
+        "color": "Xám",
+        "qty": 0,
+        "price": 300000,
+        "cost": 200000
+    },
+    {
+        "id": "P009",
+        "name": "Mũ lưỡi trai",
+        "size": "Free",
+        "color": "Đen",
+        "qty": 24,
+        "price": 80000,
+        "cost": 40000
+    },
+    {
+        "id": "P010",
+        "name": "Túi tote vải",
+        "size": "Free",
+        "color": "Trắng ngà",
+        "qty": 30,
+        "price": 100000,
+        "cost": 60000
+    },
+    {
+        "id": "P011",
+        "name": "Quần Skinny Jeans",
+        "size": "M",
+        "color": "Đen",
+        "qty": 15,
+        "price": 150000,
+        "cost": 105000.0
+    }
+]

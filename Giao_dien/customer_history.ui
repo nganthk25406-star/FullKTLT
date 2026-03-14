@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>700</width>
+    <height>350</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>350</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>700</width>
+    <height>350</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* 1. Nền trắng tinh tươm cho toàn bộ cửa sổ */
+QDialog {
+    background-color: #FFFFFF;
+}
+
+</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>211</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>18</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Lịch sử mua hàng - &quot;Tên&quot;</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>661</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTableWidget {
+    background-color: #FFFFFF;
+    alternate-background-color: #F8FAFC; /* Màu xám xanh cực nhạt cho dòng chẵn/lẻ */
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    gridline-color: #E5E7EB; /* Lưới mờ */
+    outline: none;
+}
+
+/* Thanh Tiêu đề (Header) */
+QHeaderView::section {
+    background-color: #EFF6FF; /* Nền xanh dương cực nhạt */
+    color: #1E40AF; /* Chữ xanh đậm */
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid #BFDBFE; /* Đường kẻ dưới của Header */
+    padding: 8px;
+	font-size: 15px;
+}
+
+/* Các ô dữ liệu */
+QTableWidget::item {
+    padding: 5px;
+	color: rgb(0, 0, 0);
+}</string>
+   </property>
+   <column>
+    <property name="text">
+     <string>Mã đơn</string>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Ngày</string>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Sản phẩm</string>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Tổng</string>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="order_cancel">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>300</y>
+     <width>85</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#order_cancel {
+    background-color: #FFFFFF;
+    color: #2563EB;
+    border: 1px solid #2563EB;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+}
+#order_cancel:hover {
+    background-color: #EFF6FF; /* Nền xanh lơ nhạt khi rê chuột */
+}</string>
+   </property>
+   <property name="text">
+    <string>Đóng</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>201</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="lbl_rank">
+      <property name="styleSheet">
+       <string notr="true">QLabel {
+    background-color: #E0F2FE; /* Màu nền xanh lam nhạt / cyan */
+    color: #0369A1; /* Chữ màu xanh lam đậm */
+    border-radius: 12px; /* Bo góc tạo hình viên thuốc */
+    padding: 4px 12px; /* Căn lề trái phải trên dưới cho mập mạp */
+    font-weight: bold;
+    font-size: 13px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&quot;Hạng&quot;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lbl_points">
+      <property name="styleSheet">
+       <string notr="true">    color: #3B82F6; 
+</string>
+      </property>
+      <property name="text">
+       <string>&quot;Điểm&quot;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

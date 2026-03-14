@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>520</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>400</width>
+    <height>520</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>400</width>
+    <height>520</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* 1. Nền trắng tinh tươm cho toàn bộ cửa sổ */
+QDialog {
+    background-color: #FFFFFF;
+}
+
+</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>0</y>
+     <width>191</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>.AppleSystemUIFont</family>
+     <pointsize>20</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 20pt &quot;.AppleSystemUIFont&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Thêm sản phẩm mới</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>40</y>
+     <width>401</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QFrame[frameShape=&quot;4&quot;] { 
+    color: #E5E7EB; 
+}</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="line_2">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>450</y>
+     <width>401</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QFrame[frameShape=&quot;4&quot;] { 
+    color: #E5E7EB; 
+}</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_cancel">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>470</y>
+     <width>81</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#btn_cancel {
+    background-color: #FFFFFF;
+    color: #2563EB;
+    border: 1px solid #2563EB;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+}
+#btn_cancel:hover {
+    background-color: #EFF6FF; /* Nền xanh lơ nhạt khi rê chuột */
+}</string>
+   </property>
+   <property name="text">
+    <string>Huỷ</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_them">
+   <property name="geometry">
+    <rect>
+     <x>242</x>
+     <y>470</y>
+     <width>141</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#btn_them {
+    background-color: #2563EB; /* Màu xanh dương chủ đạo */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+}
+#btn_them:hover {
+    background-color: #1D4ED8; /* Đậm hơn xíu khi rê chuột */
+}</string>
+   </property>
+   <property name="text">
+    <string>Thêm sản phẩm</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>361</width>
+     <height>381</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="font">
+       <font>
+        <pointsize>-1</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">/* 2. Format chữ cho các Tiêu đề (Labels) */
+QLabel {
+    color: #374151; /* Màu xám đậm sang trọng */
+    font-weight: bold;
+    font-size: 14px;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Tên sản phẩm</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="line_name">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit, QSpinBox {
+    border: 1px solid #D1D5DB; /* Viền xám nhạt */
+    border-radius: 6px; /* Bo góc cực mượt giống Figma */
+    padding: 8px 12px;
+    background-color: #F9FAFB; /* Nền hơi xám nhẹ */
+    color: #111827;
+    font-size: 13px;
+}</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="font">
+       <font>
+        <pointsize>-1</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">/* 2. Format chữ cho các Tiêu đề (Labels) */
+QLabel {
+    color: #374151; /* Màu xám đậm sang trọng */
+    font-weight: bold;
+    font-size: 14px;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Size</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="line_size">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit, QSpinBox {
+    border: 1px solid #D1D5DB; /* Viền xám nhạt */
+    border-radius: 6px; /* Bo góc cực mượt giống Figma */
+    padding: 8px 12px;
+    background-color: #F9FAFB; /* Nền hơi xám nhẹ */
+    color: #111827;
+    font-size: 13px;
+}</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_4">
+      <property name="font">
+       <font>
+        <pointsize>-1</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">/* 2. Format chữ cho các Tiêu đề (Labels) */
+QLabel {
+    color: #374151; /* Màu xám đậm sang trọng */
+    font-weight: bold;
+    font-size: 14px;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Màu</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="line_color">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit, QSpinBox {
+    border: 1px solid #D1D5DB; /* Viền xám nhạt */
+    border-radius: 6px; /* Bo góc cực mượt giống Figma */
+    padding: 8px 12px;
+    background-color: #F9FAFB; /* Nền hơi xám nhẹ */
+    color: #111827;
+    font-size: 13px;
+}</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_5">
+      <property name="font">
+       <font>
+        <pointsize>-1</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">/* 2. Format chữ cho các Tiêu đề (Labels) */
+QLabel {
+    color: #374151; /* Màu xám đậm sang trọng */
+    font-weight: bold;
+    font-size: 14px;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Số lượng</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="line_quan">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit, QSpinBox {
+    border: 1px solid #D1D5DB; /* Viền xám nhạt */
+    border-radius: 6px; /* Bo góc cực mượt giống Figma */
+    padding: 8px 12px;
+    background-color: #F9FAFB; /* Nền hơi xám nhẹ */
+    color: #111827;
+    font-size: 13px;
+}</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_6">
+      <property name="font">
+       <font>
+        <pointsize>-1</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">/* 2. Format chữ cho các Tiêu đề (Labels) */
+QLabel {
+    color: #374151; /* Màu xám đậm sang trọng */
+    font-weight: bold;
+    font-size: 14px;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Giá</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="line_price">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit, QSpinBox {
+    border: 1px solid #D1D5DB; /* Viền xám nhạt */
+    border-radius: 6px; /* Bo góc cực mượt giống Figma */
+    padding: 8px 12px;
+    background-color: #F9FAFB; /* Nền hơi xám nhẹ */
+    color: #111827;
+    font-size: 13px;
+}</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
