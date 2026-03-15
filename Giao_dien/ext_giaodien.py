@@ -522,7 +522,17 @@ class Main(QMainWindow):
             orders = load_json(get_path("data/orders.json"))
             df = pd.DataFrame(orders)
             df.to_excel(path, index=False)
-            QMessageBox.information(self, "Thành công", "Đã xuất file Excel!")
+            
+            msg_box = QMessageBox(self)
+            msg_box.setWindowTitle("Thành công")
+            msg_box.setText("Đã xuất file Excel!")
+            msg_box.setStyleSheet("""
+                QMessageBox { background-color: white; }
+                QLabel { color: black; font-size: 13px; }
+                QPushButton { color: black; background-color: #E2E8F0; padding: 6px 15px; border: 1px solid #94A3B8; border-radius: 4px; font-weight: bold; }
+                QPushButton:hover { background-color: #CBD5E1; }
+            """)
+            msg_box.exec()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
