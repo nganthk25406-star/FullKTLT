@@ -334,7 +334,7 @@ class Main(QMainWindow):
             status = "Còn hàng" if qty > 0 else "Hết hàng"
             item_status = QTableWidgetItem(status)
             
-            if qty < 3:
+            if qty <= 5:
                 red_brush = QBrush(QColor("red"))
                 bg_brush = QBrush(QColor("#fee2e2")) 
                 for item in [item_name, item_size, item_color, item_qty, item_price, item_cost, item_status]:
