@@ -264,6 +264,11 @@ class Main(QMainWindow):
         if hasattr(self, 'btn_history'):
             self.btn_history.clicked.connect(self.show_customer_history)
 
+        if hasattr(self, 'customer_search'):
+            self.customer_search.setStyleSheet("color: #1E40AF; background-color: white; border: 1px solid #CBD5E1; border-radius: 4px;")
+            self.customer_search.setPlaceholderText(" Tìm kiếm khách hàng...")
+            self.customer_search.textChanged.connect(self.filter_customers)
+
         if hasattr(self, 'date_picker'):
             self.date_picker.dateChanged.connect(self.load_reports)
 
@@ -275,6 +280,14 @@ class Main(QMainWindow):
         self.canvas = FigureCanvas(self.fig)
         layout = QVBoxLayout(self.frame_bieudo)
         layout.addWidget(self.canvas)
+
+    def filter_customers(self):
+        search_text = self.customer_search.text().lower()
+        for row in range(self.table_customers.rowCount()):
+            item_name = self.table_customers.item(row, 0).text().lower()
+            item_phone = self.table_customers.item(row, 1).text().lower()
+            is_match = search_text in item_name or search_text in item_phone
+            self.table_customers.setRowHidden(row, not is_match)
 
     def refresh_all_data(self):
         self.load_products()
@@ -317,6 +330,16 @@ class Main(QMainWindow):
         
         self.table_products.setColumnCount(7)
         self.table_products.setHorizontalHeaderLabels(["Tên sản phẩm", "Size", "Màu", "Số lượng", "Giá bán", "Giá gốc", "Trạng thái"])
+
+        header = self.table_products.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(5, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(6, QHeaderView.ResizeMode.Stretch)
         
         self.table_products.setRowCount(len(products))
         for row, p in enumerate(products):
