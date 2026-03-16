@@ -281,6 +281,13 @@ class Main(QMainWindow):
         layout = QVBoxLayout(self.frame_bieudo)
         layout.addWidget(self.canvas)
 
+        if hasattr(self, 'cbo_report_type'):
+            self.cbo_report_type.currentIndexChanged.connect(self.load_reports)
+            
+        if hasattr(self, 'date_picker'):
+            self.date_picker.setDate(datetime.date.today())
+            self.date_picker.dateChanged.connect(self.load_reports)
+
     def filter_customers(self):
         search_text = self.customer_search.text().lower()
         for row in range(self.table_customers.rowCount()):
@@ -436,111 +443,135 @@ class Main(QMainWindow):
             self.table_orders.setItem(row, 4, QTableWidgetItem(o["method"]))
 
     def load_reports(self):
-            if hasattr(self, 'frame_3'): self.frame_3.setMinimumHeight(120)
-            if hasattr(self, 'frame_8'): self.frame_8.setMinimumHeight(120)
-            if hasattr(self, 'frame_9'): self.frame_9.setMinimumHeight(120)
+        if hasattr(self, 'frame_3'): self.frame_3.setMinimumHeight(120)
+        if hasattr(self, 'frame_8'): self.frame_8.setMinimumHeight(120)
+        if hasattr(self, 'frame_9'): self.frame_9.setMinimumHeight(120)
+        
+        orders = load_json(get_path("data/orders.json"))
+        
+        # --- LOGIC LỌC MỚI BỔ SUNG ---
+        filter_type = self.cbo_report_type.currentText() if hasattr(self, 'cbo_report_type') else "Tất cả"
+        # Lấy ngày được chọn từ widget date_picker
+        selected_date = self.date_picker.date().toPyDate().strftime("%Y-%m-%d") if hasattr(self, 'date_picker') else ""
+        selected_month = selected_date[:7] # Định dạng YYYY-MM
+        # -----------------------------
+
+        total_rev = 0
+        total_profit = 0
+        monthly_stats = {}
+        product_sales = {}
+
+        for o in orders:
+            order_date = o.get("date", "2026-01-01")
+            month_key = order_date[:7]
+
+            # --- KIỂM TRA ĐIỀU KIỆN LỌC ---
+            if filter_type == "Theo ngày" and order_date != selected_date:
+                continue
+            elif filter_type == "Theo tháng" and month_key != selected_month:
+                continue
+            # ------------------------------
+
+            if month_key not in monthly_stats:
+                monthly_stats[month_key] = {'rev': 0, 'prof': 0}
+
+            order_rev = 0
+            order_prof = 0
+            for item in o.get("items", []):
+                qty = item.get("qty", 0)
+                price = item.get("price", 0)
+                cost = item.get("cost", price * 0.7 * qty)
+
+                rev = price * qty
+                prof = rev - cost
+
+                order_rev += rev
+                order_prof += prof
+
+                name = item.get("name", "")
+                product_sales[name] = product_sales.get(name, 0) + qty
+
+            total_rev += order_rev
+            total_profit += order_prof
+            monthly_stats[month_key]['rev'] += order_rev
+            monthly_stats[month_key]['prof'] += order_prof
+
+        if hasattr(self, 'lbl_income'):
+            self.lbl_income.setStyleSheet("color: black; font-weight: bold;")
+            self.lbl_income.setText(f"{int(total_rev):,} đ")
+        if hasattr(self, 'lbl_profit'):
+            self.lbl_profit.setStyleSheet("color: black; font-weight: bold;")
+            self.lbl_profit.setText(f"{int(total_profit):,} đ")
+
+        best_month_str = "..."
+        if monthly_stats:
+            best_month = max(monthly_stats, key=lambda k: monthly_stats[k]['rev'])
+            best_month_str = f"{best_month[5:]}/{best_month[:4]}" 
             
-            orders = load_json(get_path("data/orders.json"))
+            if hasattr(self, 'label_27'):
+                self.label_27.setText(f"Doanh thu: {int(monthly_stats[best_month]['rev']):,} đ")
             
-            total_rev = 0
-            total_profit = 0
-            monthly_stats = {}
-            product_sales = {}
+        if hasattr(self, 'lbl_best'): 
+            self.lbl_best.setStyleSheet("color: black; font-weight: bold;")
+            self.lbl_best.setText(best_month_str)
 
-            for o in orders:
-                month_key = o.get("date", "2026-01-01")[:7]
-                if month_key not in monthly_stats:
-                    monthly_stats[month_key] = {'rev': 0, 'prof': 0}
-
-                order_rev = 0
-                order_prof = 0
-                for item in o.get("items", []):
-                    qty = item.get("qty", 0)
-                    price = item.get("price", 0)
-                    cost = item.get("cost", price * 0.7 * qty)
-
-                    rev = price * qty
-                    prof = rev - cost
-
-                    order_rev += rev
-                    order_prof += prof
-
-                    name = item.get("name", "")
-                    product_sales[name] = product_sales.get(name, 0) + qty
-
-                total_rev += order_rev
-                total_profit += order_prof
-                monthly_stats[month_key]['rev'] += order_rev
-                monthly_stats[month_key]['prof'] += order_prof
-
-            if hasattr(self, 'lbl_income'):
-                self.lbl_income.setStyleSheet("color: black; font-weight: bold;")
-                self.lbl_income.setText(f"{int(total_rev):,} đ")
-            if hasattr(self, 'lbl_profit'):
-                self.lbl_profit.setStyleSheet("color: black; font-weight: bold;")
-                self.lbl_profit.setText(f"{int(total_profit):,} đ")
-
-            best_month_str = "..."
-            if monthly_stats:
-                best_month = max(monthly_stats, key=lambda k: monthly_stats[k]['rev'])
-                best_month_str = f"{best_month[5:]}/{best_month[:4]}" 
-                
-                if hasattr(self, 'label_27'):
-                    self.label_27.setText(f"Doanh thu: {int(monthly_stats[best_month]['rev']):,} đ")
-                
-            if hasattr(self, 'lbl_best'): 
-                self.lbl_best.setStyleSheet("color: black; font-weight: bold;")
-                self.lbl_best.setText(best_month_str)
-
-            if hasattr(self, 'tableWidget'):
-                self.tableWidget.setRowCount(len(monthly_stats))
-                self.tableWidget.setHorizontalHeaderLabels(["Tháng", "Doanh thu", "Lợi nhuận"])
-                self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-                
-                sorted_months = sorted(monthly_stats.items(), reverse=True)
-                
-                for row, (month, stats) in enumerate(sorted_months):
-                    display_month = f"{month[5:]}/{month[:4]}"
-                    self.tableWidget.setItem(row, 0, QTableWidgetItem(display_month))
-                    self.tableWidget.setItem(row, 1, QTableWidgetItem(f"{int(stats['rev']):,} đ"))
-                    self.tableWidget.setItem(row, 2, QTableWidgetItem(f"{int(stats['prof']):,} đ"))
-
-            if hasattr(self, 'frame_bieudo_2'):
-                if not self.frame_bieudo_2.layout():
-                    layout_top5 = QVBoxLayout(self.frame_bieudo_2)
-                    layout_top5.setContentsMargins(15, 45, 15, 15)
-                    self.top5_table = QTableWidget()
-                    self.top5_table.setColumnCount(2)
-                    self.top5_table.setHorizontalHeaderLabels(["Sản phẩm", "Đã bán"])
-                    self.top5_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-                    self.top5_table.verticalHeader().setVisible(False)
-                    self.top5_table.setStyleSheet("QTableWidget { background-color: white; border: none; } QHeaderView::section { background-color: #EFF6FF; color: #1E40AF; font-weight: bold; border: none; padding: 5px; }")
-                    layout_top5.addWidget(self.top5_table)
-                
-                top5 = sorted(product_sales.items(), key=lambda x: x[1], reverse=True)[:5]
-                self.top5_table.setRowCount(len(top5))
-                for row, (name, qty) in enumerate(top5):
-                    it_name = QTableWidgetItem(name)
-                    it_qty = QTableWidgetItem(str(qty))
-                    it_name.setForeground(QBrush(QColor("black")))
-                    it_qty.setForeground(QBrush(QColor("black")))
-                    self.top5_table.setItem(row, 0, it_name)
-                    self.top5_table.setItem(row, 1, it_qty)
-
-            self.fig.clear()
-            ax = self.fig.add_subplot(111)
-
-            self.fig.subplots_adjust(left=0.22)
+        if hasattr(self, 'tableWidget'):
+            self.tableWidget.setRowCount(len(monthly_stats))
+            self.tableWidget.setHorizontalHeaderLabels(["Tháng", "Doanh thu", "Lợi nhuận"])
+            self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
             
-            if monthly_stats:
-                sorted_months = sorted(monthly_stats.keys())
-                dates = [f"{m[5:]}/{m[:4]}" for m in sorted_months]
-                revs = [monthly_stats[m]['rev'] for m in sorted_months]
-                ax.plot(dates, revs, marker='o', color='#2563EB', linestyle='-', linewidth=2, markersize=8)
-                ax.set_title("Doanh thu")
-                ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: f"{int(x):,}"))
-                
-            self.canvas.draw()
+            sorted_months = sorted(monthly_stats.items(), reverse=True)
+            
+            for row, (month, stats) in enumerate(sorted_months):
+                display_month = f"{month[5:]}/{month[:4]}"
+                self.tableWidget.setItem(row, 0, QTableWidgetItem(display_month))
+                self.tableWidget.setItem(row, 1, QTableWidgetItem(f"{int(stats['rev']):,} đ"))
+                self.tableWidget.setItem(row, 2, QTableWidgetItem(f"{int(stats['prof']):,} đ"))
+
+        if hasattr(self, 'frame_bieudo_2'):
+            if not self.frame_bieudo_2.layout():
+                layout_top5 = QVBoxLayout(self.frame_bieudo_2)
+                layout_top5.setContentsMargins(15, 45, 15, 15)
+                self.top5_table = QTableWidget()
+                self.top5_table.setColumnCount(2)
+                self.top5_table.setHorizontalHeaderLabels(["Sản phẩm", "Đã bán"])
+                self.top5_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+                self.top5_table.verticalHeader().setVisible(False)
+                self.top5_table.setStyleSheet("QTableWidget { background-color: white; border: none; } QHeaderView::section { background-color: #EFF6FF; color: #1E40AF; font-weight: bold; border: none; padding: 5px; }")
+                layout_top5.addWidget(self.top5_table)
+            
+            top5 = sorted(product_sales.items(), key=lambda x: x[1], reverse=True)[:5]
+            self.top5_table.setRowCount(len(top5))
+            for row, (name, qty) in enumerate(top5):
+                it_name = QTableWidgetItem(name)
+                it_qty = QTableWidgetItem(str(qty))
+                it_name.setForeground(QBrush(QColor("black")))
+                it_qty.setForeground(QBrush(QColor("black")))
+                self.top5_table.setItem(row, 0, it_name)
+                self.top5_table.setItem(row, 1, it_qty)
+
+        self.fig.clear()
+        ax = self.fig.add_subplot(111)
+
+        # Chỉnh lề biểu đồ để tận dụng không gian rộng hơn
+        self.fig.subplots_adjust(left=0.15, bottom=0.25, right=0.95, top=0.9)
+        
+        if monthly_stats:
+            sorted_months = sorted(monthly_stats.keys())
+            dates = [f"{m[5:]}/{m[:4]}" for m in sorted_months]
+            revs = [monthly_stats[m]['rev'] for m in sorted_months]
+            
+            ax.plot(dates, revs, marker='o', color='#2563EB', linestyle='-', linewidth=2, markersize=6)
+            ax.set_title("Biểu đồ doanh thu")
+            
+            # --- CHỈNH CHỮ TRỤC HOÀNH NHỎ HƠN 50% ---
+            # Sử dụng fontsize nhỏ (ví dụ: 6 hoặc 7) để chữ không bị đè lên nhau
+            ax.tick_params(axis='x', labelsize=7, rotation=45) 
+            ax.tick_params(axis='y', labelsize=8)
+            
+            ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: f"{int(x):,}"))
+            
+        self.canvas.draw()
 
     def export_excel(self):
         path, _ = QFileDialog.getSaveFileName(self, "Lưu báo cáo Excel", "", "Excel Files (*.xlsx)")
@@ -557,26 +588,26 @@ class Main(QMainWindow):
                 QLabel { color: black; font-size: 13px; }
                 QPushButton { color: black; background-color: #E2E8F0; padding: 6px 15px; border: 1px solid #94A3B8; border-radius: 4px; font-weight: bold; }
                 QPushButton:hover { background-color: #CBD5E1; }
-            """)
+                """)
             msg_box.exec()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        
+            
         if hasattr(self, 'add_order') and hasattr(self, 'table_orders'):
             y_buttons = 45 
             right_margin = self.table_orders.x() + self.table_orders.width()
-            
+                
             if hasattr(self, 'btn_excel'):
                 x_excel = right_margin - self.btn_excel.width()
                 x_add = x_excel - self.add_order.width() - 15 
-                
+                    
                 self.btn_excel.move(int(x_excel), int(y_buttons))
                 self.add_order.move(int(x_add), int(y_buttons))
             else:
                 x_add = right_margin - self.add_order.width()
                 self.add_order.move(int(x_add), int(y_buttons))
-        
+            
         if hasattr(self, 'layoutWidget') and hasattr(self, 'table_products'):
             x = self.table_products.x() + self.table_products.width() - self.layoutWidget.width()
             y = self.table_products.y() - self.layoutWidget.height() - 10
