@@ -1,1 +1,26 @@
-[]
+[
+    {
+        "name": "Nga",
+        "phone": "000",
+        "email": "",
+        "points": 250
+    },
+    {
+        "name": "Ngọc",
+        "phone": "111",
+        "email": "",
+        "points": 180
+    },
+    {
+        "name": "Anh",
+        "phone": "222",
+        "email": "",
+        "points": 45
+    },
+    {
+        "name": "Bình",
+        "phone": "333",
+        "email": "",
+        "points": 12
+    }
+]
