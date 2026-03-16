@@ -1,1 +1,140 @@
-[]
+[
+    {
+        "id": "ORD001",
+        "customer": "Nga",
+        "items": [{"name": "Váy hoa nhí", "qty": 1, "price": 200000, "subtotal": 200000, "cost": 160000}],
+        "total": 200880,
+        "profit": 40880,
+        "date": "2025-01-12",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD002",
+        "customer": "Ngọc",
+        "items": [{"name": "Áo khoác Bomber", "qty": 2, "price": 400000, "subtotal": 800000, "cost": 560000}],
+        "total": 820800,
+        "profit": 260800,
+        "date": "2025-02-15",
+        "method": "QR Code"
+    },
+    {
+        "id": "ORD003",
+        "customer": "Anh",
+        "items": [{"name": "Giày Sneaker nữ", "qty": 1, "price": 500000, "subtotal": 500000, "cost": 350000}],
+        "total": 540000,
+        "profit": 190000,
+        "date": "2025-03-20",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD004",
+        "customer": "Bình",
+        "items": [{"name": "Mũ lưỡi trai", "qty": 3, "price": 80000, "subtotal": 240000, "cost": 120000}],
+        "total": 259200,
+        "profit": 139200,
+        "date": "2025-04-05",
+        "method": "QR Code"
+    },
+    {
+        "id": "ORD005",
+        "customer": "Nga",
+        "items": [{"name": "Áo sơ mi lụa", "qty": 2, "price": 220000, "subtotal": 440000, "cost": 300000}],
+        "total": 441936,
+        "profit": 141936,
+        "date": "2025-05-22",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD006",
+        "customer": "Ngọc",
+        "items": [{"name": "Quần Jeans nam", "qty": 1, "price": 312500, "subtotal": 312500, "cost": 250000}],
+        "total": 320625,
+        "profit": 70625,
+        "date": "2025-06-10",
+        "method": "QR Code"
+    },
+    {
+        "id": "ORD007",
+        "customer": "Anh",
+        "items": [{"name": "Đồ bộ", "qty": 4, "price": 62500, "subtotal": 250000, "cost": 200000}],
+        "total": 270000,
+        "profit": 70000,
+        "date": "2025-07-18",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD008",
+        "customer": "Nga",
+        "items": [{"name": "Giày Sneaker nữ", "qty": 2, "price": 500000, "subtotal": 1000000, "cost": 700000}],
+        "total": 1004400,
+        "profit": 304400,
+        "date": "2025-08-14",
+        "method": "QR Code"
+    },
+    {
+        "id": "ORD009",
+        "customer": "Ngọc",
+        "items": [{"name": "Váy hoa nhí", "qty": 3, "price": 200000, "subtotal": 600000, "cost": 480000}],
+        "total": 615600,
+        "profit": 135600,
+        "date": "2025-09-30",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD010",
+        "customer": "Bình",
+        "items": [{"name": "Áo khoác Bomber", "qty": 1, "price": 400000, "subtotal": 400000, "cost": 280000}],
+        "total": 432000,
+        "profit": 152000,
+        "date": "2025-10-12",
+        "method": "QR Code"
+    },
+    {
+        "id": "ORD011",
+        "customer": "Anh",
+        "items": [{"name": "Quần Skinny Jeans", "qty": 2, "price": 150000, "subtotal": 300000, "cost": 210000}],
+        "total": 324000,
+        "profit": 114000,
+        "date": "2025-11-25",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD012",
+        "customer": "Nga",
+        "items": [
+            {"name": "Túi tote vải", "qty": 5, "price": 100000, "subtotal": 500000, "cost": 300000},
+            {"name": "Mũ lưỡi trai", "qty": 2, "price": 80000, "subtotal": 160000, "cost": 80000}
+        ],
+        "total": 663120,
+        "profit": 283120,
+        "date": "2025-12-20",
+        "method": "QR Code"
+    },
+    {
+        "id": "ORD013",
+        "customer": "Ngọc",
+        "items": [{"name": "Giày Sneaker nữ", "qty": 1, "price": 500000, "subtotal": 500000, "cost": 350000}],
+        "total": 513000,
+        "profit": 163000,
+        "date": "2026-01-05",
+        "method": "Tiền mặt"
+    },
+    {
+        "id": "ORD014",
+        "customer": "Anh",
+        "items": [{"name": "Áo sơ mi lụa", "qty": 3, "price": 220000, "subtotal": 660000, "cost": 450000}],
+        "total": 712800,
+        "profit": 262800,
+        "date": "2026-02-14",
+        "method": "QR Code"
+    },
+    {
+        "id": "ORD015",
+        "customer": "Nga",
+        "items": [{"name": "Áo khoác Bomber", "qty": 2, "price": 400000, "subtotal": 800000, "cost": 560000}],
+        "total": 803520,
+        "profit": 243520,
+        "date": "2026-03-10",
+        "method": "Tiền mặt"
+    }
+]
