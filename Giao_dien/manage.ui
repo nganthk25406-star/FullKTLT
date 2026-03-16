@@ -82,7 +82,7 @@
     font-size: 22px; /* Chỉnh to nhỏ tùy m */
     font-weight: bold;
     color: #1A1A1A;
-	padding-top: 15px;
+    padding-top: 15px;
     padding-bottom: 15px; 
     padding-left: 10px;
 
@@ -204,7 +204,7 @@ QListWidget::item:selected {
     font-size: 15px;
     font-weight: bold;
     color: #1A1A1A;
-	padding-top: 15px;
+    padding-top: 15px;
     padding-bottom: 15px; 
     padding-left: 10px;
 
@@ -278,7 +278,7 @@ QPushButton:hover {
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
              <number>10</number>
             </property>
@@ -333,6 +333,50 @@ QPushButton:hover {
                </size>
               </property>
              </spacer>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cbo_report_type">
+              <property name="minimumSize">
+               <size>
+                <width>120</width>
+                <height>35</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QComboBox { color: #2563EB; font-weight: bold; border: 1px solid #2563EB; border-radius: 6px; padding: 5px; background: white; }</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>Tất cả</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Theo ngày</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Theo tháng</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDateEdit" name="date_picker">
+              <property name="minimumSize">
+               <size>
+                <width>120</width>
+                <height>35</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QDateEdit { color: #2563EB; font-weight: bold; border: 1px solid #2563EB; border-radius: 6px; padding: 5px; background: white; }</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="btn_excel">
@@ -809,13 +853,13 @@ QHeaderView::section {
     border: none;
     border-bottom: 2px solid #BFDBFE; /* Đường kẻ dưới của Header */
     padding: 8px;
-	font-size: 15px;
+    font-size: 15px;
 }
 
 /* Các ô dữ liệu */
 QTableWidget::item {
     padding: 5px;
-	color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
 }</string>
            </property>
            <column>
@@ -900,13 +944,13 @@ QHeaderView::section {
     border: none;
     border-bottom: 2px solid #BFDBFE; /* Đường kẻ dưới của Header */
     padding: 8px;
-	font-size: 15px;
+    font-size: 15px;
 }
 
 /* Các ô dữ liệu */
 QTableWidget::item {
     padding: 5px;
-	color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
 }
 
 /* Khi User click chọn 1 dòng */
@@ -1129,13 +1173,13 @@ QHeaderView::section {
     border: none;
     border-bottom: 2px solid #BFDBFE; /* Đường kẻ dưới của Header */
     padding: 8px;
-	font-size: 15px;
+    font-size: 15px;
 }
 
 /* Các ô dữ liệu */
 QTableWidget::item {
     padding: 5px;
-	color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
 }
 </string>
         </property>
@@ -1293,13 +1337,13 @@ QHeaderView::section {
     border: none;
     border-bottom: 2px solid #BFDBFE; /* Đường kẻ dưới của Header */
     padding: 8px;
-	font-size: 15px;
+    font-size: 15px;
 }
 
 /* Các ô dữ liệu */
 QTableWidget::item {
     padding: 5px;
-	color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
 }
 </string>
         </property>
@@ -1415,7 +1459,7 @@ QTableWidget::item {
     background-color: white;
     color: #2563EB; /* Chữ màu xanh dương chủ đạo */
     font-weight: bold;
-	font-align: center;
+    font-align: center;
     border: 1px solid #2563EB; /* Viền màu xanh dương chủ đạo */
     border-radius: 6px;
     padding: 8px 15px;
