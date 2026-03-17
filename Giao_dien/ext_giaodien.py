@@ -592,26 +592,44 @@ class Main(QMainWindow):
             msg_box.exec()
 
     def resizeEvent(self, event):
-        super().resizeEvent(event)
+            super().resizeEvent(event)
             
-        if hasattr(self, 'add_order') and hasattr(self, 'table_orders'):
-            y_buttons = 45 
-            right_margin = self.table_orders.x() + self.table_orders.width()
+            # --- BỔ SUNG: Tự động căn chỉnh kích thước các bảng để không bị tràn màn hình ---
+            if hasattr(self, 'stackedWidget'):
+                page_width = self.stackedWidget.width()
+                page_height = self.stackedWidget.height()
                 
-            if hasattr(self, 'btn_excel'):
-                x_excel = right_margin - self.btn_excel.width()
-                x_add = x_excel - self.add_order.width() - 15 
+                # Áp dụng cho cả 3 bảng: Sản phẩm, Đơn hàng, Khách hàng
+                for table_name in ['table_products', 'table_orders', 'table_customers']:
+                    if hasattr(self, table_name):
+                        table = getattr(self, table_name)
+                        # Trừ hao lề phải và lề dưới 20px cho đẹp mắt
+                        new_width = page_width - table.x() - 20
+                        new_height = page_height - table.y() - 20
+                        
+                        # Cập nhật kích thước mới
+                        if new_width > 0 and new_height > 0:
+                            table.resize(new_width, new_height)
+            # --------------------------------------------------------------------------------
+                
+            if hasattr(self, 'add_order') and hasattr(self, 'table_orders'):
+                y_buttons = 45 
+                right_margin = self.table_orders.x() + self.table_orders.width()
                     
-                self.btn_excel.move(int(x_excel), int(y_buttons))
-                self.add_order.move(int(x_add), int(y_buttons))
-            else:
-                x_add = right_margin - self.add_order.width()
-                self.add_order.move(int(x_add), int(y_buttons))
-            
-        if hasattr(self, 'layoutWidget') and hasattr(self, 'table_products'):
-            x = self.table_products.x() + self.table_products.width() - self.layoutWidget.width()
-            y = self.table_products.y() - self.layoutWidget.height() - 10
-            self.layoutWidget.move(int(x), int(y))
+                if hasattr(self, 'btn_excel'):
+                    x_excel = right_margin - self.btn_excel.width()
+                    x_add = x_excel - self.add_order.width() - 15 
+                        
+                    self.btn_excel.move(int(x_excel), int(y_buttons))
+                    self.add_order.move(int(x_add), int(y_buttons))
+                else:
+                    x_add = right_margin - self.add_order.width()
+                    self.add_order.move(int(x_add), int(y_buttons))
+                
+            if hasattr(self, 'layoutWidget') and hasattr(self, 'table_products'):
+                x = self.table_products.x() + self.table_products.width() - self.layoutWidget.width()
+                y = self.table_products.y() - self.layoutWidget.height() - 10
+                self.layoutWidget.move(int(x), int(y))
 
 
 # ================= CÁC DIALOG CHỨC NĂNG =================
