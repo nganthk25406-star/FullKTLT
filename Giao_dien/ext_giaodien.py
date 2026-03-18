@@ -457,11 +457,8 @@ class Main(QMainWindow):
                     selected_date = self.date_picker.date().toPyDate().strftime("%Y-%m-%d") if hasattr(self, 'date_picker') else ""
                     selected_month = selected_date[:7]
 
-                    total_rev = 0
-                    total_profit = 0
-                    monthly_stats = {}
-                    product_sales = {}
-                    daily_stats = {}
+                    total_rev, total_profit = 0, 0
+                    monthly_stats, product_sales, daily_stats = {}, {}, {}
 
                     for o in orders:
                         order_date = o.get("date", "2026-01-01")
@@ -477,8 +474,7 @@ class Main(QMainWindow):
                         if order_date not in daily_stats:
                             daily_stats[order_date] = {'rev': 0, 'prof': 0}
 
-                        order_rev = 0
-                        order_prof = 0
+                        order_rev, order_prof = 0, 0
                         for item in o.get("items", []):
                             qty = item.get("qty", 0)
                             price = item.get("price", 0)
@@ -497,7 +493,7 @@ class Main(QMainWindow):
                         daily_stats[order_date]['rev'] += order_rev
                         daily_stats[order_date]['prof'] += order_prof
 
-                    # Cập nhật Label
+                    # Cập nhật Label hiển thị tiền
                     if hasattr(self, 'lbl_income'):
                         self.lbl_income.setStyleSheet("color: black; font-weight: bold;")
                         self.lbl_income.setText(f"{int(total_rev):,} đ")
@@ -526,58 +522,74 @@ class Main(QMainWindow):
                             self.tableWidget.setItem(row, 1, QTableWidgetItem(f"{int(stats['rev']):,} đ"))
                             self.tableWidget.setItem(row, 2, QTableWidgetItem(f"{int(stats['prof']):,} đ"))
 
-                    # Cập nhật Top 5 sản phẩm
+                    # --- TÍCH HỢP AI KHUYẾN NGHỊ VÀO BẢNG TOP 5 ---
                     if hasattr(self, 'frame_bieudo_2'):
                         if not self.frame_bieudo_2.layout():
                             layout_top5 = QVBoxLayout(self.frame_bieudo_2)
                             layout_top5.setContentsMargins(15, 45, 15, 15)
                             self.top5_table = QTableWidget()
-                            self.top5_table.setColumnCount(2)
-                            self.top5_table.setHorizontalHeaderLabels(["Sản phẩm", "Đã bán"])
+                            self.top5_table.setColumnCount(3) # Cột 3 là cột Lời khuyên AI
+                            self.top5_table.setHorizontalHeaderLabels(["Sản phẩm", "Đã bán", "AI Lời khuyên"])
                             self.top5_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
                             self.top5_table.verticalHeader().setVisible(False)
                             self.top5_table.setStyleSheet("QTableWidget { background-color: white; border: none; } QHeaderView::section { background-color: #EFF6FF; color: #1E40AF; font-weight: bold; border: none; padding: 5px; }")
                             layout_top5.addWidget(self.top5_table)
                         
+                        # Load tồn kho để đối chiếu logic AI
+                        prods = load_json(get_path("data/products.json"))
+                        stock_map = {p["name"]: p["qty"] for p in prods}
+
                         top5 = sorted(product_sales.items(), key=lambda x: x[1], reverse=True)[:5]
                         self.top5_table.setRowCount(len(top5))
                         for row, (name, qty) in enumerate(top5):
+                            curr_stock = stock_map.get(name, 0)
+                            
+                            # AI Rule-based: So khớp tốc độ bán và hàng tồn
+                            if qty >= 5 and curr_stock < 10:
+                                advice, color = "🔥 Nhập gấp!", "#E21C3D"
+                            elif qty <= 2 and curr_stock > 20:
+                                advice, color = "⚠️ Giảm nhập", "#6B7280"
+                            else:
+                                advice, color = "✅ Ổn định", "#059669"
+
                             it_name = QTableWidgetItem(name)
                             it_qty = QTableWidgetItem(str(qty))
+                            it_adv = QTableWidgetItem(advice)
                             
-                            # Cập nhật màu chữ sang Xanh dương đậm (#1E40AF)
+                            # Màu xanh dương đậm cho dữ liệu chính
                             dark_blue = QColor("#1E40AF")
                             it_name.setForeground(QBrush(dark_blue))
                             it_qty.setForeground(QBrush(dark_blue))
                             
+                            # Màu sắc thông báo cho cột AI (Không dùng QFont)
+                            it_adv.setForeground(QBrush(QColor(color)))
+                            
                             self.top5_table.setItem(row, 0, it_name)
                             self.top5_table.setItem(row, 1, it_qty)
+                            self.top5_table.setItem(row, 2, it_adv)
 
                     # ==========================================
-                    # --- LOGIC VẼ BIỂU ĐỒ TỔNG HỢP ---
+                    # --- LOGIC VẼ BIỂU ĐỒ & AI DỰ BÁO ---
                     # ==========================================
                     self.fig.clear()
                     ax = self.fig.add_subplot(111)
                     
-                    # left=0.25: Đẩy biểu đồ sang phải ~1.5cm
-                    # right=0.98: Kéo dãn sát lề phải để trục hoành dài ra tối đa
+                    # Chỉnh tọa độ biểu đồ dịch phải 1.5cm và giãn trục hoành
                     self.fig.subplots_adjust(left=0.25, bottom=0.3, right=0.98, top=0.85)
 
-                    if filter_type == "Theo tháng":
-                        if daily_stats:
-                            sorted_days = sorted(daily_stats.keys())
-                            dates = [f"{d[8:]}/{d[5:7]}" for d in sorted_days]
-                            revs = [daily_stats[d]['rev'] for d in sorted_days]
-                            ax.plot(dates, revs, marker='o', color='#10B981', linewidth=2, label="Hàng ngày")
-                            ax.set_title(f"Doanh thu tháng {selected_month[5:]}/{selected_month[:4]}", pad=20)
+                    if filter_type == "Theo tháng" and daily_stats:
+                        sorted_days = sorted(daily_stats.keys())
+                        dates = [f"{d[8:]}/{d[5:7]}" for d in sorted_days]
+                        revs = [daily_stats[d]['rev'] for d in sorted_days]
+                        ax.plot(dates, revs, marker='o', color='#10B981', linewidth=2)
+                        ax.set_title(f"Doanh thu tháng {selected_month[5:]}/{selected_month[:4]}", pad=20)
 
-                    elif filter_type == "Theo ngày":
-                        if daily_stats:
-                            sorted_days = sorted(daily_stats.keys())
-                            dates = [f"{d[8:]}/{d[5:7]}" for d in sorted_days]
-                            revs = [daily_stats[d]['rev'] for d in sorted_days]
-                            ax.plot(dates, revs, marker='o', color='#F59E0B', linewidth=2)
-                            ax.set_title(f"Báo cáo ngày {selected_date[8:]}/{selected_date[5:7]}", pad=20)
+                    elif filter_type == "Theo ngày" and daily_stats:
+                        sorted_days = sorted(daily_stats.keys())
+                        dates = [f"{d[8:]}/{d[5:7]}" for d in sorted_days]
+                        revs = [daily_stats[d]['rev'] for d in sorted_days]
+                        ax.plot(dates, revs, marker='o', color='#F59E0B', linewidth=2)
+                        ax.set_title(f"Báo cáo ngày {selected_date[8:]}/{selected_date[5:7]}", pad=20)
                     
                     else: # Chế độ "Tất cả" + AI Dự báo
                         if monthly_stats:
@@ -596,14 +608,10 @@ class Main(QMainWindow):
                                 ax.legend(fontsize=8)
                             ax.set_title("Biểu đồ doanh thu & Dự báo AI", pad=20)
 
-                    # Định dạng trục Tung (VND)
+                    # Định dạng tiền VND và xoay chữ 45 độ
                     ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: f'{int(x):,} VND'))
-                    
-                    # Xoay trục Hoành 45 độ
                     self.fig.autofmt_xdate(rotation=45)
-                    
                     self.canvas.draw()
-                            # ==========================================
 
     def export_excel(self):
             path, _ = QFileDialog.getSaveFileName(self, "Lưu báo cáo Excel", "", "Excel Files (*.xlsx)")
