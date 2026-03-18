@@ -443,153 +443,220 @@ class Main(QMainWindow):
             self.table_orders.setItem(row, 4, QTableWidgetItem(o["method"]))
 
     def load_reports(self):
-        if hasattr(self, 'frame_3'): self.frame_3.setMinimumHeight(120)
-        if hasattr(self, 'frame_8'): self.frame_8.setMinimumHeight(120)
-        if hasattr(self, 'frame_9'): self.frame_9.setMinimumHeight(120)
-        
-        orders = load_json(get_path("data/orders.json"))
-        
-        # --- LOGIC LỌC MỚI BỔ SUNG ---
-        filter_type = self.cbo_report_type.currentText() if hasattr(self, 'cbo_report_type') else "Tất cả"
-        # Lấy ngày được chọn từ widget date_picker
-        selected_date = self.date_picker.date().toPyDate().strftime("%Y-%m-%d") if hasattr(self, 'date_picker') else ""
-        selected_month = selected_date[:7] # Định dạng YYYY-MM
-        # -----------------------------
+                    import matplotlib.ticker as ticker
+                    import numpy as np
 
-        total_rev = 0
-        total_profit = 0
-        monthly_stats = {}
-        product_sales = {}
+                    if hasattr(self, 'frame_3'): self.frame_3.setMinimumHeight(120)
+                    if hasattr(self, 'frame_8'): self.frame_8.setMinimumHeight(120)
+                    if hasattr(self, 'frame_9'): self.frame_9.setMinimumHeight(120)
+                    
+                    orders = load_json(get_path("data/orders.json"))
+                    
+                    # --- LOGIC LỌC ---
+                    filter_type = self.cbo_report_type.currentText() if hasattr(self, 'cbo_report_type') else "Tất cả"
+                    selected_date = self.date_picker.date().toPyDate().strftime("%Y-%m-%d") if hasattr(self, 'date_picker') else ""
+                    selected_month = selected_date[:7]
 
-        for o in orders:
-            order_date = o.get("date", "2026-01-01")
-            month_key = order_date[:7]
+                    total_rev = 0
+                    total_profit = 0
+                    monthly_stats = {}
+                    product_sales = {}
+                    daily_stats = {}
 
-            # --- KIỂM TRA ĐIỀU KIỆN LỌC ---
-            if filter_type == "Theo ngày" and order_date != selected_date:
-                continue
-            elif filter_type == "Theo tháng" and month_key != selected_month:
-                continue
-            # ------------------------------
+                    for o in orders:
+                        order_date = o.get("date", "2026-01-01")
+                        month_key = order_date[:7]
 
-            if month_key not in monthly_stats:
-                monthly_stats[month_key] = {'rev': 0, 'prof': 0}
+                        if filter_type == "Theo ngày" and order_date != selected_date:
+                            continue
+                        elif filter_type == "Theo tháng" and month_key != selected_month:
+                            continue
 
-            order_rev = 0
-            order_prof = 0
-            for item in o.get("items", []):
-                qty = item.get("qty", 0)
-                price = item.get("price", 0)
-                cost = item.get("cost", price * 0.7 * qty)
+                        if month_key not in monthly_stats:
+                            monthly_stats[month_key] = {'rev': 0, 'prof': 0}
+                        if order_date not in daily_stats:
+                            daily_stats[order_date] = {'rev': 0, 'prof': 0}
 
-                rev = price * qty
-                prof = rev - cost
+                        order_rev = 0
+                        order_prof = 0
+                        for item in o.get("items", []):
+                            qty = item.get("qty", 0)
+                            price = item.get("price", 0)
+                            cost = item.get("cost", price * 0.7 * qty)
+                            rev = price * qty
+                            prof = rev - cost
+                            order_rev += rev
+                            order_prof += prof
+                            name = item.get("name", "")
+                            product_sales[name] = product_sales.get(name, 0) + qty
 
-                order_rev += rev
-                order_prof += prof
+                        total_rev += order_rev
+                        total_profit += order_prof
+                        monthly_stats[month_key]['rev'] += order_rev
+                        monthly_stats[month_key]['prof'] += order_prof
+                        daily_stats[order_date]['rev'] += order_rev
+                        daily_stats[order_date]['prof'] += order_prof
 
-                name = item.get("name", "")
-                product_sales[name] = product_sales.get(name, 0) + qty
+                    # Cập nhật Label
+                    if hasattr(self, 'lbl_income'):
+                        self.lbl_income.setStyleSheet("color: black; font-weight: bold;")
+                        self.lbl_income.setText(f"{int(total_rev):,} đ")
+                    if hasattr(self, 'lbl_profit'):
+                        self.lbl_profit.setStyleSheet("color: black; font-weight: bold;")
+                        self.lbl_profit.setText(f"{int(total_profit):,} đ")
 
-            total_rev += order_rev
-            total_profit += order_prof
-            monthly_stats[month_key]['rev'] += order_rev
-            monthly_stats[month_key]['prof'] += order_prof
+                    best_month_str = "..."
+                    if monthly_stats:
+                        best_month = max(monthly_stats, key=lambda k: monthly_stats[k]['rev'])
+                        best_month_str = f"{best_month[5:]}/{best_month[:4]}" 
+                        if hasattr(self, 'label_27'):
+                            self.label_27.setText(f"Doanh thu: {int(monthly_stats[best_month]['rev']):,} đ")
+                    
+                    if hasattr(self, 'lbl_best'): 
+                        self.lbl_best.setStyleSheet("color: black; font-weight: bold;")
+                        self.lbl_best.setText(best_month_str)
 
-        if hasattr(self, 'lbl_income'):
-            self.lbl_income.setStyleSheet("color: black; font-weight: bold;")
-            self.lbl_income.setText(f"{int(total_rev):,} đ")
-        if hasattr(self, 'lbl_profit'):
-            self.lbl_profit.setStyleSheet("color: black; font-weight: bold;")
-            self.lbl_profit.setText(f"{int(total_profit):,} đ")
+                    # Cập nhật Table Doanh thu tháng
+                    if hasattr(self, 'tableWidget'):
+                        self.tableWidget.setRowCount(len(monthly_stats))
+                        sorted_months_data = sorted(monthly_stats.items(), reverse=True)
+                        for row, (month, stats) in enumerate(sorted_months_data):
+                            display_month = f"{month[5:]}/{month[:4]}"
+                            self.tableWidget.setItem(row, 0, QTableWidgetItem(display_month))
+                            self.tableWidget.setItem(row, 1, QTableWidgetItem(f"{int(stats['rev']):,} đ"))
+                            self.tableWidget.setItem(row, 2, QTableWidgetItem(f"{int(stats['prof']):,} đ"))
 
-        best_month_str = "..."
-        if monthly_stats:
-            best_month = max(monthly_stats, key=lambda k: monthly_stats[k]['rev'])
-            best_month_str = f"{best_month[5:]}/{best_month[:4]}" 
-            
-            if hasattr(self, 'label_27'):
-                self.label_27.setText(f"Doanh thu: {int(monthly_stats[best_month]['rev']):,} đ")
-            
-        if hasattr(self, 'lbl_best'): 
-            self.lbl_best.setStyleSheet("color: black; font-weight: bold;")
-            self.lbl_best.setText(best_month_str)
+                    # Cập nhật Top 5 sản phẩm
+                    if hasattr(self, 'frame_bieudo_2'):
+                        if not self.frame_bieudo_2.layout():
+                            layout_top5 = QVBoxLayout(self.frame_bieudo_2)
+                            layout_top5.setContentsMargins(15, 45, 15, 15)
+                            self.top5_table = QTableWidget()
+                            self.top5_table.setColumnCount(2)
+                            self.top5_table.setHorizontalHeaderLabels(["Sản phẩm", "Đã bán"])
+                            self.top5_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+                            self.top5_table.verticalHeader().setVisible(False)
+                            self.top5_table.setStyleSheet("QTableWidget { background-color: white; border: none; } QHeaderView::section { background-color: #EFF6FF; color: #1E40AF; font-weight: bold; border: none; padding: 5px; }")
+                            layout_top5.addWidget(self.top5_table)
+                        
+                        top5 = sorted(product_sales.items(), key=lambda x: x[1], reverse=True)[:5]
+                        self.top5_table.setRowCount(len(top5))
+                        for row, (name, qty) in enumerate(top5):
+                            it_name = QTableWidgetItem(name)
+                            it_qty = QTableWidgetItem(str(qty))
+                            
+                            # Cập nhật màu chữ sang Xanh dương đậm (#1E40AF)
+                            dark_blue = QColor("#1E40AF")
+                            it_name.setForeground(QBrush(dark_blue))
+                            it_qty.setForeground(QBrush(dark_blue))
+                            
+                            self.top5_table.setItem(row, 0, it_name)
+                            self.top5_table.setItem(row, 1, it_qty)
 
-        if hasattr(self, 'tableWidget'):
-            self.tableWidget.setRowCount(len(monthly_stats))
-            self.tableWidget.setHorizontalHeaderLabels(["Tháng", "Doanh thu", "Lợi nhuận"])
-            self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-            
-            sorted_months = sorted(monthly_stats.items(), reverse=True)
-            
-            for row, (month, stats) in enumerate(sorted_months):
-                display_month = f"{month[5:]}/{month[:4]}"
-                self.tableWidget.setItem(row, 0, QTableWidgetItem(display_month))
-                self.tableWidget.setItem(row, 1, QTableWidgetItem(f"{int(stats['rev']):,} đ"))
-                self.tableWidget.setItem(row, 2, QTableWidgetItem(f"{int(stats['prof']):,} đ"))
+                    # ==========================================
+                    # --- LOGIC VẼ BIỂU ĐỒ TỔNG HỢP ---
+                    # ==========================================
+                    self.fig.clear()
+                    ax = self.fig.add_subplot(111)
+                    
+                    # left=0.25: Đẩy biểu đồ sang phải ~1.5cm
+                    # right=0.98: Kéo dãn sát lề phải để trục hoành dài ra tối đa
+                    self.fig.subplots_adjust(left=0.25, bottom=0.3, right=0.98, top=0.85)
 
-        if hasattr(self, 'frame_bieudo_2'):
-            if not self.frame_bieudo_2.layout():
-                layout_top5 = QVBoxLayout(self.frame_bieudo_2)
-                layout_top5.setContentsMargins(15, 45, 15, 15)
-                self.top5_table = QTableWidget()
-                self.top5_table.setColumnCount(2)
-                self.top5_table.setHorizontalHeaderLabels(["Sản phẩm", "Đã bán"])
-                self.top5_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-                self.top5_table.verticalHeader().setVisible(False)
-                self.top5_table.setStyleSheet("QTableWidget { background-color: white; border: none; } QHeaderView::section { background-color: #EFF6FF; color: #1E40AF; font-weight: bold; border: none; padding: 5px; }")
-                layout_top5.addWidget(self.top5_table)
-            
-            top5 = sorted(product_sales.items(), key=lambda x: x[1], reverse=True)[:5]
-            self.top5_table.setRowCount(len(top5))
-            for row, (name, qty) in enumerate(top5):
-                it_name = QTableWidgetItem(name)
-                it_qty = QTableWidgetItem(str(qty))
-                it_name.setForeground(QBrush(QColor("black")))
-                it_qty.setForeground(QBrush(QColor("black")))
-                self.top5_table.setItem(row, 0, it_name)
-                self.top5_table.setItem(row, 1, it_qty)
+                    if filter_type == "Theo tháng":
+                        if daily_stats:
+                            sorted_days = sorted(daily_stats.keys())
+                            dates = [f"{d[8:]}/{d[5:7]}" for d in sorted_days]
+                            revs = [daily_stats[d]['rev'] for d in sorted_days]
+                            ax.plot(dates, revs, marker='o', color='#10B981', linewidth=2, label="Hàng ngày")
+                            ax.set_title(f"Doanh thu tháng {selected_month[5:]}/{selected_month[:4]}", pad=20)
 
-        self.fig.clear()
-        ax = self.fig.add_subplot(111)
+                    elif filter_type == "Theo ngày":
+                        if daily_stats:
+                            sorted_days = sorted(daily_stats.keys())
+                            dates = [f"{d[8:]}/{d[5:7]}" for d in sorted_days]
+                            revs = [daily_stats[d]['rev'] for d in sorted_days]
+                            ax.plot(dates, revs, marker='o', color='#F59E0B', linewidth=2)
+                            ax.set_title(f"Báo cáo ngày {selected_date[8:]}/{selected_date[5:7]}", pad=20)
+                    
+                    else: # Chế độ "Tất cả" + AI Dự báo
+                        if monthly_stats:
+                            sorted_months_keys = sorted(monthly_stats.keys())
+                            dates = [f"{m[5:]}/{m[:4]}" for m in sorted_months_keys]
+                            revs = [monthly_stats[m]['rev'] for m in sorted_months_keys]
+                            ax.plot(dates, revs, marker='o', color='#2563EB', linewidth=2, label="Thực tế")
+                            
+                            if len(revs) >= 2:
+                                x_num = np.arange(len(revs))
+                                z = np.polyfit(x_num, revs, 1)
+                                model = np.poly1d(z)
+                                predicted_rev = max(0, model(len(revs)))
+                                ax.plot([dates[-1], "Tháng tới"], [revs[-1], predicted_rev], 
+                                        marker='*', color='#EF4444', linestyle='--', linewidth=2, label="AI Dự báo")
+                                ax.legend(fontsize=8)
+                            ax.set_title("Biểu đồ doanh thu & Dự báo AI", pad=20)
 
-        # Chỉnh lề biểu đồ để tận dụng không gian rộng hơn
-        self.fig.subplots_adjust(left=0.15, bottom=0.25, right=0.95, top=0.9)
-        
-        if monthly_stats:
-            sorted_months = sorted(monthly_stats.keys())
-            dates = [f"{m[5:]}/{m[:4]}" for m in sorted_months]
-            revs = [monthly_stats[m]['rev'] for m in sorted_months]
-            
-            ax.plot(dates, revs, marker='o', color='#2563EB', linestyle='-', linewidth=2, markersize=6)
-            ax.set_title("Biểu đồ doanh thu")
-            
-            # --- CHỈNH CHỮ TRỤC HOÀNH NHỎ HƠN 50% ---
-            # Sử dụng fontsize nhỏ (ví dụ: 6 hoặc 7) để chữ không bị đè lên nhau
-            ax.tick_params(axis='x', labelsize=7, rotation=45) 
-            ax.tick_params(axis='y', labelsize=8)
-            
-            ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: f"{int(x):,}"))
-            
-        self.canvas.draw()
+                    # Định dạng trục Tung (VND)
+                    ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: f'{int(x):,} VND'))
+                    
+                    # Xoay trục Hoành 45 độ
+                    self.fig.autofmt_xdate(rotation=45)
+                    
+                    self.canvas.draw()
+                            # ==========================================
 
     def export_excel(self):
-        path, _ = QFileDialog.getSaveFileName(self, "Lưu báo cáo Excel", "", "Excel Files (*.xlsx)")
-        if path:
-            orders = load_json(get_path("data/orders.json"))
-            df = pd.DataFrame(orders)
-            df.to_excel(path, index=False)
-            
-            msg_box = QMessageBox(self)
-            msg_box.setWindowTitle("Thành công")
-            msg_box.setText("Đã xuất file Excel!")
-            msg_box.setStyleSheet("""
-                QMessageBox { background-color: white; }
-                QLabel { color: black; font-size: 13px; }
-                QPushButton { color: black; background-color: #E2E8F0; padding: 6px 15px; border: 1px solid #94A3B8; border-radius: 4px; font-weight: bold; }
-                QPushButton:hover { background-color: #CBD5E1; }
-                """)
-            msg_box.exec()
+            path, _ = QFileDialog.getSaveFileName(self, "Lưu báo cáo Excel", "", "Excel Files (*.xlsx)")
+            if path:
+                orders = load_json(get_path("data/orders.json"))
+                
+                # 1. Lấy điều kiện lọc hiện tại từ giao diện
+                filter_type = self.cbo_report_type.currentText() if hasattr(self, 'cbo_report_type') else "Tất cả"
+                selected_date = self.date_picker.date().toPyDate().strftime("%Y-%m-%d") if hasattr(self, 'date_picker') else ""
+                selected_month = selected_date[:7]
+                
+                # 2. Lọc danh sách đơn hàng
+                filtered_orders = []
+                for o in orders:
+                    order_date = o.get("date", "2026-01-01")
+                    month_key = order_date[:7]
+                    
+                    # Bỏ qua các đơn không khớp điều kiện
+                    if filter_type == "Theo ngày" and order_date != selected_date:
+                        continue
+                    elif filter_type == "Theo tháng" and month_key != selected_month:
+                        continue
+                        
+                    filtered_orders.append(o)
+                    
+                # Cảnh báo nếu khoảng thời gian này không có đơn hàng nào
+                if not filtered_orders:
+                    msg_box = QMessageBox(self)
+                    msg_box.setWindowTitle("Thông báo")
+                    msg_box.setText("Không có dữ liệu đơn hàng nào trong khoảng thời gian này để xuất!")
+                    msg_box.setStyleSheet("""
+                        QMessageBox { background-color: white; }
+                        QLabel { color: black; font-size: 13px; }
+                        QPushButton { color: black; background-color: #E2E8F0; padding: 6px 15px; border: 1px solid #94A3B8; border-radius: 4px; font-weight: bold; }
+                        QPushButton:hover { background-color: #CBD5E1; }
+                    """)
+                    msg_box.exec()
+                    return
+
+                # 3. Dùng thư viện Pandas để xuất dữ liệu đã lọc ra Excel
+                df = pd.DataFrame(filtered_orders)
+                df.to_excel(path, index=False)
+                
+                msg_box = QMessageBox(self)
+                msg_box.setWindowTitle("Thành công")
+                msg_box.setText("Đã xuất file Excel theo bộ lọc thành công!")
+                msg_box.setStyleSheet("""
+                    QMessageBox { background-color: white; }
+                    QLabel { color: black; font-size: 13px; }
+                    QPushButton { color: black; background-color: #E2E8F0; padding: 6px 15px; border: 1px solid #94A3B8; border-radius: 4px; font-weight: bold; }
+                    QPushButton:hover { background-color: #CBD5E1; }
+                    """)
+                msg_box.exec()
 
     def resizeEvent(self, event):
             super().resizeEvent(event)
