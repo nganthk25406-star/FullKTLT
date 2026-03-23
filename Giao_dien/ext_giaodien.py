@@ -612,7 +612,6 @@ class Main(QMainWindow):
                     ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: f'{int(x):,} VND'))
                     self.fig.autofmt_xdate(rotation=45)
                     self.canvas.draw()
-
     def export_excel(self):
             path, _ = QFileDialog.getSaveFileName(self, "Lưu báo cáo Excel", "", "Excel Files (*.xlsx)")
             if path:
